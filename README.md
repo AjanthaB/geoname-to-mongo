@@ -1,0 +1,1 @@
+# This Python script download and save all geonames in the world from geoname server to mongod db.
