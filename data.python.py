@@ -83,7 +83,7 @@ def get_states_by_geonameId(geonameId):
     try:
         r = requests.get(url = URL, params = PARAMS)
         data = r.json()
-        if data['geonames']:
+        if 'geonames' in data:
             return data['geonames']
         else:
             print "geonames does not exist in the response"
@@ -96,13 +96,16 @@ def save_states_to_db(geonameId):
     states = get_states_by_geonameId(geonameId)
     # maped_states = []
 
-    for state in states:
-        # maped_states.append(map_to_stare(state, geonameId))
-        db.states.insert_one(state)
+    if (isinstance(states, list)):
+        for state in states:
+            # maped_states.append(map_to_stare(state, geonameId))
+            db.states.insert_one(map_to_stare(state, geonameId))
 
-    print geonameId
-    print "done "
-
+        print geonameId
+        print "done "
+    else:
+      print "not done"
+      print states;
 
 
 
@@ -111,7 +114,8 @@ def get_countries_from_db():
 
     for country in countries:
         time.sleep(5)
-        if country['geonameId']:
+        print country
+        if 'geonameId' in country:
             save_states_to_db(country['geonameId'])
         else:
             print "no id"
@@ -121,7 +125,7 @@ def get_countries_from_db():
 
 def run_the_script():
     # save_continets_to_db()
-    # get_continents_from_db()
+    get_continents_from_db()
     # save_countries_to_db(6255147)
     get_countries_from_db()
 
